@@ -8,9 +8,10 @@ import {
     WebGLRenderer,
     Scene,
     AmbientLight,
+    PerspectiveCamera,
 } from "three";
 
-import { createCamera } from "./system/camera";
+import { PerspectiveCamera } from "three";
 
 const LANG_EN = "en";
 
@@ -47,22 +48,11 @@ class App {
         this.initializePlane = this.initializePlane.bind(this);
         this.update = this.update.bind(this);
         this.updateAnimation = this.updateAnimation.bind(this);
-        this.runToLang = this.runToLang.bind(this);
+        this.changeLang = this.changeLang.bind(this);
         this.loadNextLang = this.loadNextLang.bind(this);
         this.run = this.run.bind(this);
         this.render = this.render.bind(this);
         this.frameRequest = this.frameRequest.bind(this);
-    }
-
-    frameRequest() {
-        this.update();
-        this.render();
-        requestAnimationFrame(this.frameRequest);
-    }
-
-    async run() {
-        await this.initialize();
-        requestAnimationFrame(this.frameRequest);
     }
 
     async initialize() {
@@ -71,10 +61,8 @@ class App {
         this.renderer.domElement.style.zIndex = CANVAS_INDEX;
         document.body.appendChild(this.renderer.domElement);
 
-        this.camera = createCamera({
-            width: window.innerWidth,
-            height: window.innerHeight,
-        });
+        const aspect = window.innerWidth / window.innerHeight;
+        this.camera = new PerspectiveCamera(15, aspect, 0.1, 1000);
         this.scene = new Scene();
         this.scene.add(new AmbientLight(0xffffff));
 
@@ -104,7 +92,7 @@ class App {
             for (const button of buttons) {
                 button.onclick = () => {
                     const buttonLang = button.getAttribute("data-lang");
-                    this.runToLang(buttonLang);
+                    this.changeLang(buttonLang);
                 };
             }
 
@@ -202,7 +190,18 @@ class App {
         this.renderer.render(this.scene, this.camera);
     }
 
-    runToLang(lang) {
+    frameRequest() {
+        this.update();
+        this.render();
+        requestAnimationFrame(this.frameRequest);
+    }
+
+    async run() {
+        await this.initialize();
+        requestAnimationFrame(this.frameRequest);
+    }
+
+    changeLang(lang) {
         if (this.currentLang === lang) {
             return;
         }
