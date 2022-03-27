@@ -21,7 +21,7 @@ form {
     border-radius: 5px;
     background-color: white;
     position: absolute;
-    top: calc(50% - 328px);
+    top: calc(50% - 128px);
     left: calc(50% - 256px);
     z-index: 1;
 }

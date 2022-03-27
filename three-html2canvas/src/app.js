@@ -11,13 +11,13 @@ import {
     PerspectiveCamera,
 } from "three";
 
-import { PerspectiveCamera } from "three";
-
 const LANG_EN = "en";
 
+const CAMERA_POSITION_Z = 1;
+
 const PLANE_POSITION_Z = 0;
-const PLANE_PUSH_BACK_POSITION_Z = PLANE_POSITION_Z + -3;
-const PLANE_MOVE_SPEED = 0.1;
+const PLANE_PUSH_BACK_POSITION_Z = PLANE_POSITION_Z - 0.5;
+const PLANE_MOVE_SPEED = 0.02;
 const PLANE_ROTATION_SPEED = 0.04;
 
 const ANIMATION_STAGE_NONE = null;
@@ -31,6 +31,8 @@ const ANIMATION_STAGE_PUSH_FRONT = "push-front";
 const INACTIVE_FORM_INDEX = 1;
 const CANVAS_INDEX = INACTIVE_FORM_INDEX + 1;
 const ACTIVE_FORM_INDEX = CANVAS_INDEX + 1;
+
+const COLOR_WHITE = new Color(0xffffff);
 
 const setImageSource = (image, src) => {
     return new Promise((resolve) => {
@@ -63,14 +65,15 @@ class App {
 
         const aspect = window.innerWidth / window.innerHeight;
         this.camera = new PerspectiveCamera(15, aspect, 0.1, 1000);
+        this.camera.position.z = CAMERA_POSITION_Z;
+
         this.scene = new Scene();
-        this.scene.add(new AmbientLight(0xffffff));
+        this.scene.background = COLOR_WHITE;
+        this.scene.add(new AmbientLight(COLOR_WHITE));
 
         this.currentLang = LANG_EN;
         this.nextLang = null;
         this.animationStage = ANIMATION_STAGE_NONE;
-        this.scene.background = new Color(0xffffff);
-        this.camera.position.z = 1;
 
         this.initializeForms();
         await this.initializePlane();
@@ -109,14 +112,20 @@ class App {
         await setImageSource(this.image, screenshot.toDataURL());
         this.texture.needsUpdate = true;
 
-        const geometry = new PlaneGeometry(
-            this.texture.image.width,
-            this.texture.image.height
+        const imageRatio = this.image.width / this.image.height;
+        const ratioImageAndWindow = this.image.height / window.innerHeight;
+        const cameraFovInRadians = ((this.camera.fov / 2) * Math.PI) / 180;
+        const distanceBetweenCameraAndPlane = Math.abs(
+            CAMERA_POSITION_Z - PLANE_POSITION_Z
         );
+        const planeSize =
+            Math.tan(cameraFovInRadians) * distanceBetweenCameraAndPlane * 2;
+
+        const geometry = new PlaneGeometry(imageRatio, 1);
         const material = new MeshBasicMaterial({ map: this.texture });
         this.plane = new Mesh(geometry, material);
-        this.plane.scale.x = 0.00038;
-        this.plane.scale.y = 0.00038;
+        this.plane.scale.x = planeSize * ratioImageAndWindow;
+        this.plane.scale.y = planeSize * ratioImageAndWindow;
         this.plane.position.z = PLANE_POSITION_Z;
         this.scene.add(this.plane);
     }
@@ -130,8 +139,8 @@ class App {
     updateAnimation() {
         if (this.animationStage === ANIMATION_STAGE_PUSH_BACK) {
             if (this.plane.position.z > PLANE_PUSH_BACK_POSITION_Z) {
-                this.forms[this.currentLang].style.zIndex = INACTIVE_FORM_INDEX;
                 this.plane.position.z -= PLANE_MOVE_SPEED;
+                this.forms[this.currentLang].style.zIndex = INACTIVE_FORM_INDEX;
             } else {
                 this.plane.position.z = PLANE_PUSH_BACK_POSITION_Z;
                 this.animationStage = ANIMATION_STAGE_TURN_HALFWAY;
