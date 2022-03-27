@@ -1,0 +1,46 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: "Philosopher", sans-serif;
+    margin: 0;
+}
+
+form {
+    width: 512px;
+    height: 256px;
+    padding: 40px;
+    font-size: 18px;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    background-color: white;
+    position: absolute;
+    top: calc(50% - 328px);
+    left: calc(50% - 256px);
+    z-index: 1;
+}
+
+canvas {
+    position: relative;
+    z-index: 2;
+}
+
+.form-controls {
+    position: absolute;
+    bottom: 16%;
+    width: 512px;
+    display: flex;
+    justify-content: center;
+    left: calc(50% - 256px);
+}
+
+.form-controls button {
+    margin: 0 4px;
+    text-transform: uppercase;
+}
