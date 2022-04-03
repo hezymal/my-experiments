@@ -1,7 +1,7 @@
 {
     "name": "my-three-html2canvas",
     "version": "1.0.0",
-    "license": "MIT",
+    "license": "ISC",
     "scripts": {
         "start": "yarn parcel src/index.html --no-cache"
     },
