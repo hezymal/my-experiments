@@ -1,0 +1,19 @@
+{
+    "name": "@pixijs-matterjs/client",
+    "version": "1.0.0",
+    "license": "ISC",
+    "scripts": {
+        "start": "yarn parcel src/index.html --no-cache"
+    },
+    "dependencies": {
+        "matter-js": "^0.18.0",
+        "pixi.js": "^6.3.0",
+        "socket.io-client": "^4.4.1"
+    },
+    "devDependencies": {
+        "buffer": "^6.0.3",
+        "http-proxy-middleware": "^2.0.4",
+        "parcel": "^2.4.0",
+        "querystring-es3": "^0.2.1"
+    }
+}
