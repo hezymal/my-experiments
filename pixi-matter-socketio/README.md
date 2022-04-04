@@ -1,6 +1,6 @@
-# My Experiments: PixiJS and MatterJS
+# pixi-matter-socketio
 
-Эксперимент с библиотеками `PixiJS` (библиотека для работы с 2D графикой в браузере) и `MatterJS` (библиотека 2D физики).
+Эксперимент с библиотеками `pixi.js` (библиотека для работы с 2D графикой в браузере), `matter.js` (библиотека 2D физики) и `socket.io` (библиотека для обмена сообщениями).
 
 ## Скрипты
 
@@ -14,5 +14,4 @@ yarn start
 1. https://pixijs.com/;
 2. https://brm.io/matter-js/;
 3. https://github.com/celsowhite/matter-pixi;
-4. https://socket.io/;
-5. https://hub.docker.com/_/redis.
+4. https://socket.io/.
